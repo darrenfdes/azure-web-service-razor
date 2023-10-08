@@ -4,7 +4,7 @@ namespace product.Services
 {
     public interface IProductService
     {
-        public List<Product> GetProducts();
+        public Task<List<Product>> GetProducts();
         public Task<bool> IsBeta();
     }
 }

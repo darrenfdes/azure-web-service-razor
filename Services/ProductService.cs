@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using Microsoft.FeatureManagement;
+using System.Text.Json;
 using product.Models;
 
 namespace product.Services
@@ -23,31 +24,38 @@ namespace product.Services
        {
            return await _featureManager.IsEnabledAsync("beta");  
        }
-        public List<Product> GetProducts()
+        public async Task<List<Product>> GetProducts()
         {
             var products = new List<Product>();
             
             // SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("productDB"));
             
             //AzureAppConfiguration
-            SqlConnection connection = new SqlConnection(_configuration["sqlconnection"]);
-            SqlCommand command = new SqlCommand();
-            command.CommandText = "Select * from Product";
-            command.Connection = connection;
-            connection.Open();
-            var reader = command.ExecuteReader();
-            while(reader.Read())
+            // SqlConnection connection = new SqlConnection(_configuration["sqlconnection"]);
+            // SqlCommand command = new SqlCommand();
+            // command.CommandText = "Select * from Product";
+            // command.Connection = connection;
+            // connection.Open();
+            // var reader = command.ExecuteReader();
+            // while(reader.Read())
+            // {
+            //     var product = new Product()
+            //     {
+            //         Id = reader.GetInt32(0),
+            //         ProductName = reader.GetString(1),
+            //         Price = reader.GetDecimal(2)
+            //     };
+            //     products.Add(product);
+            // }
+            // connection.Close();
+            // return products;
+            string functionUrl = "https://sql-function-az.azurewebsites.net/api/getproducts";
+            using(HttpClient client = new HttpClient())
             {
-                var product = new Product()
-                {
-                    Id = reader.GetInt32(0),
-                    ProductName = reader.GetString(1),
-                    Price = reader.GetDecimal(2)
-                };
-                products.Add(product);
+                HttpResponseMessage response = await client.GetAsync(functionUrl);
+                string content = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<Product>>(content);
             }
-            connection.Close();
-            return products;
         }
 
     }

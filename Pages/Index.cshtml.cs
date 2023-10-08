@@ -17,7 +17,7 @@ public class IndexModel : PageModel
 
     public void OnGet()
     {
-        Products = productService.GetProducts();
+        Products = productService.GetProducts().Result;
         IsBeta = productService.IsBeta().Result;
     }
 }
