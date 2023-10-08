@@ -8,6 +8,7 @@ public class IndexModel : PageModel
 {
     private readonly IProductService productService;
     public List<Product> Products;
+    public bool IsBeta;
 
     public IndexModel(IProductService productService)
     {
@@ -17,5 +18,6 @@ public class IndexModel : PageModel
     public void OnGet()
     {
         Products = productService.GetProducts();
+        IsBeta = productService.IsBeta().Result;
     }
 }

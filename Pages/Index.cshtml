@@ -6,6 +6,10 @@
 
 <div class="text-center">
     <h1 class="display-4">Product List with Github Actions</h1>
+    @if(Model.IsBeta)
+    {
+        <h2 class="display-4">Beta Version</h2>
+    }
     <table class= "table table-bordered">
         <thead class="thead-dark">
             <tr>

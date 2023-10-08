@@ -3,20 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using Microsoft.FeatureManagement;
 using product.Models;
 
 namespace product.Services
 {
     public class ProductService : IProductService
     {
-        IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
+        private readonly IFeatureManager _featureManager;
 
-    public ProductService(IConfiguration configuration)
+    public ProductService(IConfiguration configuration,IFeatureManager featureManager)
     {
         _configuration=configuration;
+        _featureManager=featureManager;
     }
 
-       
+       public async Task<bool> IsBeta()
+       {
+           return await _featureManager.IsEnabledAsync("beta");  
+       }
         public List<Product> GetProducts()
         {
             var products = new List<Product>();
