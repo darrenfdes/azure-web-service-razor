@@ -2,6 +2,12 @@ using product.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//appConfiguration connection string
+var connectionString = "Endpoint=https://product-db-sql-server.azconfig.io;Id=MdNN;Secret=JiVfyavSgbnhxsd08ZZRuhPCQxemIhJM8JqyAZesc7g=";
+
+builder.Host.ConfigureAppConfiguration(builder=>
+{builder.AddAzureAppConfiguration(connectionString);}
+);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddTransient<IProductService,ProductService>();

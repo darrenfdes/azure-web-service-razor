@@ -20,7 +20,11 @@ namespace product.Services
         public List<Product> GetProducts()
         {
             var products = new List<Product>();
-            SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("productDB"));
+            
+            // SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("productDB"));
+            
+            //AzureAppConfiguration
+            SqlConnection connection = new SqlConnection(_configuration["sqlconnection"]);
             SqlCommand command = new SqlCommand();
             command.CommandText = "Select * from Product";
             command.Connection = connection;
