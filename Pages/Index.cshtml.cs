@@ -6,12 +6,12 @@ namespace product.Pages;
 
 public class IndexModel : PageModel
 {
-    private readonly ProductService productService;
+    private readonly IProductService productService;
     public List<Product> Products;
 
-    public IndexModel()
+    public IndexModel(IProductService productService)
     {
-        productService = new ProductService();
+        this.productService = productService;
     }
 
     public void OnGet()

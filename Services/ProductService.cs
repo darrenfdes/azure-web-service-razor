@@ -7,23 +7,20 @@ using product.Models;
 
 namespace product.Services
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
-          public SqlConnection GetConnection(){
-            string serverName="azure-product.database.windows.net";
-            string databaseName = "productDB";
-            string userName = "admin123";
-            string password="polarisedm123!";
-            string connectionString = 
-            "Server="+serverName+",1433;"+ "Initial Catalog="+databaseName+";Persist Security Info=False;"+
-            "User ID="+userName+";Password="+password+";"+"MultipleActiveResultSets=False;"+"Encrypt=True;TrustServerCertificate=False;Connection Timeout=30";
-            //"Server=tcp:azure-product.database.windows.net,1433;Initial Catalog=productDB;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication="Active Directory Default";
-            return new SqlConnection(connectionString);
-        }
+        IConfiguration _configuration;
+
+    public ProductService(IConfiguration configuration)
+    {
+        _configuration=configuration;
+    }
+
+       
         public List<Product> GetProducts()
         {
             var products = new List<Product>();
-            SqlConnection connection = GetConnection();
+            SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("productDB"));
             SqlCommand command = new SqlCommand();
             command.CommandText = "Select * from Product";
             command.Connection = connection;
@@ -35,7 +32,7 @@ namespace product.Services
                 {
                     Id = reader.GetInt32(0),
                     ProductName = reader.GetString(1),
-                    Price = reader.GetInt32(2)
+                    Price = reader.GetDecimal(2)
                 };
                 products.Add(product);
             }

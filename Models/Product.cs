@@ -9,6 +9,6 @@ namespace product.Models
     {
         public int Id { get; set; }
         public string ProductName { get; set; }
-        public int Price { get; set; }
+        public decimal Price { get; set; }
     }
 }
